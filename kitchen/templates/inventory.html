@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="mb-4">Inventory</h1>
+
+<a href="{% url 'add_inventory' %}" class="btn btn-success mb-3">+ Add Inventory Item</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Item ID</th>
+            <th>Name</th>
+            <th>Qty</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for item in inventory %}
+        <tr class="{% if item.qty < 5 %}table-danger{% endif %}">
+            <td>{{ item.item_id }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.qty }}</td>
+
+            <td>
+                {% if item.qty < 5 %}
+                    <span class="badge bg-danger">Low Stock</span>
+                {% else %}
+                    <span class="badge bg-success">OK</span>
+                {% endif %}
+            </td>
+
+            <td>
+                <a href="{% url 'edit_inventory' item.item_id %}" class="btn btn-primary btn-sm">
+                    Edit
+                </a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="5" class="text-center">No inventory items found.</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+
+</table>
+
+{% endblock %}

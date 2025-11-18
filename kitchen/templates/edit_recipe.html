@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="mb-4">Edit Recipe</h1>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label class="form-label">Recipe Name</label>
+        <input type="text" name="name" class="form-control" value="{{ recipe.name }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Ingredients</label>
+        <small class="text-muted d-block mb-2">
+            Format: <strong>item:qty,item:qty</strong><br>
+            Example: <code>patty:1,bun:1,tomato:2</code>
+        </small>
+
+        <input type="text" name="ingredients" class="form-control" value="{{ ingredients }}" required>
+    </div>
+
+    <button class="btn btn-success">Update Recipe</button>
+    <a href="{% url 'recipe_list' %}" class="btn btn-secondary">Cancel</a>
+</form>
+
+{% endblock %}

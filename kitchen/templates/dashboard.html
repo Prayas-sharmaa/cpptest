@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mb-4">Dashboard</h2>
+
+<!-- Row 1: KPI Cards -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Orders</h5>
+                <h2>{{ orders|length }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Active Kitchens</h5>
+                <h2>{{ kitchens|default:15 }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Revenue</h5>
+                <h2>€{{ revenue|default:"1560.00" }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Row 2: Live Orders Table -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">Live Orders</div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Recipe</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>{{ order.order_id }}</td>
+                            <td>{{ order.recipe }}</td>
+                            <td>{{ order.status }}</td>
+                            <td>{{ order.timestamp|default:"-" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="4">No orders yet</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Row 3: Inventory Alerts Panel -->
+<div class="row">
+    <div class="col-12">
+        <div class="card text-bg-danger mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Low Stock Alerts</h5>
+                <ul>
+                    {% for item in low_stock %}
+                        <li>{{ item.name }}: {{ item.qty }}</li>
+                    {% empty %}
+                        <li>All inventory healthy 🎉</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

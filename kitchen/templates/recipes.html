@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="mb-4">Recipes</h1>
+
+<a href="{% url 'add_recipe' %}" class="btn btn-success mb-3">+ Add Recipe</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Recipe ID</th>
+            <th>Name</th>
+            <th>Ingredients</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for recipe in recipes %}
+        <tr>
+            <td>{{ recipe.recipe_id }}</td>
+            <td>{{ recipe.name }}</td>
+            <td>
+                <ul>
+                    {% for key, val in recipe.ingredients.items %}
+                        <li>{{ key }} : {{ val }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <a href="{% url 'edit_recipe' recipe.recipe_id %}" class="btn btn-primary btn-sm">
+                    Edit
+                </a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="4" class="text-center">No recipes found.</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+
+</table>
+
+{% endblock %}
