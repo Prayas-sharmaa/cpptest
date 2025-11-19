@@ -14,7 +14,6 @@
             <th>Actions</th>
         </tr>
     </thead>
-
     <tbody>
     {% for recipe in recipes %}
         <tr>
@@ -28,9 +27,10 @@
                 </ul>
             </td>
             <td>
-                <a href="{% url 'edit_recipe' recipe.recipe_id %}" class="btn btn-primary btn-sm">
-                    Edit
-                </a>
+                <a href="{% url 'edit_recipe' recipe.recipe_id %}" class="btn btn-primary btn-sm">Edit</a>
+                <a href="{% url 'delete_recipe' recipe.recipe_id %}" 
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Delete this recipe?');">Delete</a>
             </td>
         </tr>
     {% empty %}
@@ -39,7 +39,6 @@
         </tr>
     {% endfor %}
     </tbody>
-
 </table>
 
 {% endblock %}

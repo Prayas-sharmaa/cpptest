@@ -56,3 +56,15 @@ class DynamoDBClient(AWSBaseClient):
         if isinstance(data, int):
             return Decimal(data)
         return data
+        
+    def delete(self, table, key):
+        """
+        Delete an item from the DynamoDB table.
+    
+        Args:
+            table (str): Table name.
+            key (dict): Primary key of the item to delete, e.g. {"item_id": "123"}.
+        """
+        tbl = self.resource.Table(table)
+        return tbl.delete_item(Key=key)
+
