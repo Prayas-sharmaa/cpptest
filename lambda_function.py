@@ -13,7 +13,7 @@ INVENTORY_TABLE = "Inventory"
 RECIPES_TABLE = "Recipes"
 
 # SNS topic ARN for low-stock alerts
-SNS_TOPIC_ARN = "arn:aws:sns:us-east-1:326603068904:cloudkitchen-order-notifications"
+SNS_TOPIC_ARN = "arn:aws:sns:us-east-1:326603068904:LowStockAlerts"
 
 # AWS Clients
 dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
