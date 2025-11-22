@@ -3,24 +3,35 @@
 
 <h1 class="mb-4">Add Recipe</h1>
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-
+    
     <div class="mb-3">
-        <label class="form-label">Recipe Name</label>
-        <input type="text" name="name" class="form-control" placeholder="e.g., Veg Burger" required>
+        <label for="id_name" class="form-label">Recipe Name</label>
+        {{ form.name }}
+        {% if form.name.errors %}
+            <div class="text-danger">{{ form.name.errors }}</div>
+        {% endif %}
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Ingredients</label>
-        <small class="text-muted d-block mb-2">
-            Format: <strong>item:qty,item:qty</strong>  
-            Example: <code>patty:1,bun:1,tomato:2</code>
-        </small>
-        <input type="text" name="ingredients" class="form-control" required>
+        <label for="id_ingredients" class="form-label">Ingredients</label>
+        {{ form.ingredients }}
+        <small class="form-text text-muted">Format: item1:qty1,item2:qty2</small>
+        {% if form.ingredients.errors %}
+            <div class="text-danger">{{ form.ingredients.errors }}</div>
+        {% endif %}
     </div>
 
-    <button class="btn btn-success">Save Recipe</button>
+    <div class="mb-3">
+        <label for="id_image" class="form-label">Upload File / Image (optional)</label>
+        {{ form.image }}
+        {% if form.image.errors %}
+            <div class="text-danger">{{ form.image.errors }}</div>
+        {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-success">Save Recipe</button>
     <a href="{% url 'recipe_list' %}" class="btn btn-secondary">Cancel</a>
 </form>
 

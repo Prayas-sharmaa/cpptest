@@ -31,6 +31,10 @@
                 <a href="{% url 'delete_recipe' recipe.recipe_id %}" 
                    class="btn btn-danger btn-sm"
                    onclick="return confirm('Delete this recipe?');">Delete</a>
+                {% if recipe.s3_key %}
+                    <a href="{% url 'download_recipe_file' recipe.recipe_id %}" 
+                       class="btn btn-info btn-sm">Ingredients & Method Snippet</a>
+                {% endif %}
             </td>
         </tr>
     {% empty %}
