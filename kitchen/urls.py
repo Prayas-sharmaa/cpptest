@@ -22,5 +22,8 @@ urlpatterns = [
     path('recipes/edit/<str:recipe_id>/', views.edit_recipe, name='edit_recipe'),
     path('recipes/delete/<str:recipe_id>/', views.delete_recipe, name='delete_recipe'),
     path('recipes/download/<str:recipe_id>/', views.download_recipe_file, name='download_recipe_file'),
+    
+    path("simulate-data/", views.simulator_data, name="simulate_data"),
+
 ]
 
