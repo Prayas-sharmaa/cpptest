@@ -46,26 +46,32 @@
     <!-- Top Navbar -->
     <div class="top-navbar">
         <div class="brand">Smart Cloud Kitchen</div>
+
         <div class="top-right">
-            <span class="me-3"></span>
-            <span>Admin</span>
+            {% if user.is_authenticated %}
+                <span class="me-3">Welcome, {{ user.username }}</span>
+            {% else %}
+                <a href="/login/" class="btn btn-sm btn-light">Login</a>
+            {% endif %}
         </div>
     </div>
 
     <div class="container-fluid">
         <div class="row">
 
-            <!-- Sidebar -->
+            <!-- Sidebar (only shown when logged in) -->
+            {% if user.is_authenticated %}
             <div class="col-md-3 sidebar">
                 <a href="/">Dashboard</a>
                 <a href="/orders/">Orders</a>
                 <a href="/inventory/">Inventory</a>
-                <a href="/recipes/">recipe</a>
+                <a href="/recipes/">Recipes</a>
                 <a href="/logout/">Logout</a>
             </div>
+            {% endif %}
 
             <!-- Main Content -->
-            <div class="col-md-9 main-content">
+            <div class="{% if user.is_authenticated %}col-md-9{% else %}col-md-12{% endif %} main-content">
                 {% block content %}{% endblock %}
             </div>
 

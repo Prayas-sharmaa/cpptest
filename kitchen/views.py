@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, JsonResponse
 from aws_lib.dynamodb_client import DynamoDBClient
+from django.contrib.auth.decorators import login_required
 from aws_lib.sqs_client import SQSClient
 from aws_lib.sns_client import SNSClient
 from .forms import CreateOrderForm, InventoryForm, RecipeForm
@@ -42,6 +43,7 @@ def sns_topic_arn():
 # --------------------------
 # DASHBOARD (UPDATED)
 # --------------------------
+@login_required
 def dashboard(request):
     orders = ddb.scan("Orders")
     inventory = ddb.scan("Inventory")
@@ -73,6 +75,7 @@ def dashboard(request):
 # --------------------------
 # NEW: PRODUCTION SIMULATOR ENDPOINT
 # --------------------------
+@login_required
 def simulator_data(request):
     recipe_id = request.GET.get("recipe_id")
     if not recipe_id:
@@ -106,6 +109,7 @@ def simulator_data(request):
 # --------------------------
 # ORDER VIEWS
 # --------------------------
+@login_required
 def orders_list(request):
     orders = ddb.scan("Orders")
     recipe_lookup = {r["recipe_id"]: r["name"] for r in ddb.scan("Recipes")}
@@ -127,7 +131,7 @@ def orders_list(request):
         "search": search
     })
 
-
+@login_required
 def create_order(request):
     if request.method == "POST":
         form = CreateOrderForm(request.POST)
@@ -152,7 +156,7 @@ def create_order(request):
 
     return render(request, "create_order.html", {"form": form})
 
-
+@login_required
 def delete_order(request, order_id):
     ddb.delete("Orders", {"order_id": order_id})
     return redirect("orders_list")
@@ -161,11 +165,12 @@ def delete_order(request, order_id):
 # --------------------------
 # INVENTORY VIEWS
 # --------------------------
+@login_required
 def inventory_list(request):
     inventory = ddb.scan("Inventory")
     return render(request, "inventory.html", {"inventory": inventory})
 
-
+@login_required
 def add_inventory(request):
     if request.method == "POST":
         form = InventoryForm(request.POST)
@@ -185,7 +190,7 @@ def add_inventory(request):
 
     return render(request, "add_inventory.html", {"form": form})
 
-
+@login_required
 def edit_inventory(request, item_id):
     item = ddb.get("Inventory", {"item_id": item_id})
 
@@ -197,7 +202,7 @@ def edit_inventory(request, item_id):
 
     return render(request, "edit_inventory.html", {"item": item})
 
-
+@login_required
 def delete_inventory(request, item_id):
     ddb.delete("Inventory", {"item_id": item_id})
     return redirect("inventory_list")
@@ -206,11 +211,12 @@ def delete_inventory(request, item_id):
 # --------------------------
 # RECIPE VIEWS
 # --------------------------
+@login_required
 def recipe_list(request):
     recipes = ddb.scan("Recipes")
     return render(request, "recipes.html", {"recipes": recipes})
 
-
+@login_required
 def add_recipe(request):
     if request.method == "POST":
         form = RecipeForm(request.POST, request.FILES)
@@ -243,7 +249,7 @@ def add_recipe(request):
 
     return render(request, "add_recipe.html", {"form": form})
 
-
+@login_required
 def edit_recipe(request, recipe_id):
     recipe = ddb.get("Recipes", {"recipe_id": recipe_id})
 
@@ -279,12 +285,12 @@ def edit_recipe(request, recipe_id):
 
     return render(request, "edit_recipe.html", {"form": form, "recipe": recipe})
 
-
+@login_required
 def delete_recipe(request, recipe_id):
     ddb.delete("Recipes", {"recipe_id": recipe_id})
     return redirect("recipe_list")
 
-
+@login_required
 def download_recipe_file(request, recipe_id):
     recipe = ddb.get("Recipes", {"recipe_id": recipe_id})
     if not recipe or not recipe.get("s3_key"):
