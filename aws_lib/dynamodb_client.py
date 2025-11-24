@@ -12,9 +12,6 @@ class DynamoDBClient(AWSBaseClient):
     def _deserialize(self, value):
         """Convert DynamoDB data into plain Python types."""
         if isinstance(value, dict):
-            # DynamoDB structured value like {"N": "5"} handled automatically by boto3?
-            # But your previous implementation overrides it, so we fix it.
-            # We assume normal boto3 resource returns plain dict, not attribute dict.
             return {k: self._deserialize(v) for k, v in value.items()}
         if isinstance(value, list):
             return [self._deserialize(v) for v in value]
@@ -28,7 +25,6 @@ class DynamoDBClient(AWSBaseClient):
 
     def put(self, table, item):
         tbl = self.resource.Table(table)
-        # Convert Python ints to Decimal to avoid Dynamo issues
         clean_item = self._convert_to_decimal(item)
         return tbl.put_item(Item=clean_item)
 
@@ -56,15 +52,14 @@ class DynamoDBClient(AWSBaseClient):
         if isinstance(data, int):
             return Decimal(data)
         return data
-        
+
     def delete(self, table, key):
         """
         Delete an item from the DynamoDB table.
-    
+
         Args:
             table (str): Table name.
             key (dict): Primary key of the item to delete, e.g. {"item_id": "123"}.
         """
         tbl = self.resource.Table(table)
         return tbl.delete_item(Key=key)
-

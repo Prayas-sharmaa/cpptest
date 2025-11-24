@@ -194,13 +194,30 @@ def add_inventory(request):
 def edit_inventory(request, item_id):
     item = ddb.get("Inventory", {"item_id": item_id})
 
-    if request.method == "POST":
-        name = request.POST["name"]
-        qty = int(request.POST["qty"])
-        ddb.put("Inventory", {"item_id": item_id, "name": name, "qty": qty})
+    if not item:
         return redirect("inventory_list")
 
-    return render(request, "edit_inventory.html", {"item": item})
+    if request.method == "POST":
+        form = InventoryForm(request.POST)
+        if form.is_valid():
+            qty = form.cleaned_data["qty"]
+
+            ddb.put("Inventory", {
+                "item_id": item_id,
+                "name": item["name"],   # keep original name
+                "qty": qty
+            })
+            return redirect("inventory_list")
+
+    else:
+        # Pre-fill form with existing item values
+        form = InventoryForm(initial={
+            "name": item["name"],
+            "qty": item["qty"]
+        })
+
+    return render(request, "edit_inventory.html", {"form": form, "item": item})
+
 
 @login_required
 def delete_inventory(request, item_id):
