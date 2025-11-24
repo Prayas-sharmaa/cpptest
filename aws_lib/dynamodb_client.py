@@ -5,10 +5,6 @@ class DynamoDBClient(AWSBaseClient):
     def __init__(self):
         super().__init__("dynamodb")
 
-    # --------------------------
-    # Helpers
-    # --------------------------
-
     def _deserialize(self, value):
         """Convert DynamoDB data into plain Python types."""
         if isinstance(value, dict):
@@ -19,9 +15,7 @@ class DynamoDBClient(AWSBaseClient):
             return int(value) if value % 1 == 0 else float(value)
         return value
 
-    # --------------------------
-    # Public CRUD
-    # --------------------------
+# CURD
 
     def put(self, table, item):
         tbl = self.resource.Table(table)
@@ -40,9 +34,7 @@ class DynamoDBClient(AWSBaseClient):
         items = resp.get("Items", [])
         return [self._deserialize(i) for i in items]
 
-    # --------------------------
-    # Convert all ints → Decimal
-    # --------------------------
+# int to decimal
     def _convert_to_decimal(self, data):
         """Recursively convert ints to Decimal for DynamoDB put_item."""
         if isinstance(data, dict):
@@ -56,10 +48,6 @@ class DynamoDBClient(AWSBaseClient):
     def delete(self, table, key):
         """
         Delete an item from the DynamoDB table.
-
-        Args:
-            table (str): Table name.
-            key (dict): Primary key of the item to delete, e.g. {"item_id": "123"}.
         """
         tbl = self.resource.Table(table)
         return tbl.delete_item(Key=key)

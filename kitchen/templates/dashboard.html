@@ -44,11 +44,11 @@
 
 </div>
 
-<!-- Row 2: Live Orders Table -->
+<!-- Row 2: Orders Table -->
 <div class="row mb-4">
     <div class="col-12">
         <div class="card">
-            <div class="card-header">Live Orders</div>
+            <div class="card-header">Orders</div>
             <div class="card-body">
                 <table class="table table-striped">
                     <thead>
@@ -74,11 +74,11 @@
 </div>
 
 
-<!-- Row 3: Production Simulator -->
+<!-- Row 3: Production -->
 <div class="row mb-4">
     <div class="col-12">
         <div class="card">
-            <div class="card-header">Production Simulator</div>
+            <div class="card-header">Production</div>
             <div class="card-body">
 
                 <label>Select a Recipe:</label>
@@ -97,7 +97,6 @@
 </div>
 
 <script>
-// Handle simulator dropdown selection
 document.getElementById("sim-recipe").addEventListener("change", function () {
     const recipeId = this.value;
     if (!recipeId) {

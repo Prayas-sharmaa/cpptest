@@ -2,9 +2,6 @@ import json
 from decimal import Decimal
 import boto3
 
-# --------------------------
-# AWS Config / Hardcoded
-# --------------------------
 AWS_REGION = "us-east-1"
 
 # DynamoDB tables
@@ -24,17 +21,13 @@ orders_table = dynamodb.Table(ORDERS_TABLE)
 inventory_table = dynamodb.Table(INVENTORY_TABLE)
 recipes_table = dynamodb.Table(RECIPES_TABLE)
 
-# --------------------------
-# Helper to safely convert DynamoDB Decimal
-# --------------------------
+# to convert dynamodb decimal
 def to_int(value):
     if isinstance(value, Decimal):
         return int(value)
     return value
 
-# --------------------------
-# Lambda Handler
-# --------------------------
+# lambda handler
 def lambda_handler(event, context):
     print("Received event:", json.dumps(event))
     
